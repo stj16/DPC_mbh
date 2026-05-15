@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  <title>DiasporaConnect — Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js" defer></script>
+  <link rel="stylesheet" href="app-styles.css"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#16213e"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DiasporaConnect"/>
+</head>
+<body>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast"></div>
+
+<!-- ===== MODAL OVERLAY ===== -->
+<div id="modalOverlay" class="modal-overlay" onclick="closeModal()"></div>
+<div id="modalContent" class="modal-box"></div>
+
+<!-- ===== PORTAL SELECTOR ===== -->
+<div id="portalSelector" class="portal-selector active-view">
+  <div class="ps-bg"></div>
+  <div class="ps-content">
+    <div class="ps-logo">
+      <svg width="64" height="64" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="12" fill="url(#lg)"/>
+        <path d="M12 14C12 14 16 10 20 10C26 10 28 14 28 18C28 24 20 30 20 30C20 30 12 24 12 18" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M17 18L20 21L27 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="30" cy="12" r="5" fill="#16A34A"/><path d="M28 12H32M30 10V14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#F97316"/><stop offset="1" stop-color="#EA580C"/></linearGradient></defs>
+      </svg>
+    </div>
+    <h1 class="ps-title">Diaspora<strong>Connect</strong></h1>
+    <p class="ps-sub">Choisissez votre portail pour tester l'application</p>
+
+    <div class="ps-cards">
+      <button class="ps-card" onclick="openPortal('diaspora')">
+        <div class="ps-card-icon ps-diaspora-icon">
+          <i data-lucide="plane"></i>
+        </div>
+        <h3>Portail Diaspora</h3>
+        <p>Envoyez de l'argent a vos proches au Benin depuis l'etranger</p>
+        <span class="ps-card-arrow"><i data-lucide="arrow-right"></i></span>
+      </button>
+
+      <button class="ps-card" onclick="openPortal('benin')">
+        <div class="ps-card-icon ps-benin-icon">
+          <i data-lucide="map-pin"></i>
+        </div>
+        <h3>Portail Beninois</h3>
+        <p>Recevez de l'argent, payez vos factures et vos achats</p>
+        <span class="ps-card-arrow"><i data-lucide="arrow-right"></i></span>
+      </button>
+    </div>
+
+    <div class="ps-footer">
+      <span>LumniX — MIABE 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DIASPORA APP ===== -->
+<div id="diasporaApp" class="app-shell">
+  <!-- Screens -->
+  <div class="app-screens">
+
+    <!-- D-Home -->
+    <div class="screen active" id="d-home">
+      <div class="screen-scroll">
+        <div class="d-home-header">
+          <div>
+            <h2 class="greeting">Bonjour, Aminata <span class="wave">&#128075;</span></h2>
+            <p class="greeting-sub">Ou envoyez-vous de l'argent aujourd'hui ?</p>
+          </div>
+          <button class="avatar-btn" onclick="goScreen('d-profile')">
+            <div class="avatar avatar-orange">AM</div>
+          </button>
+        </div>
+
+        <!-- Calculator Card -->
+        <div class="card calc-card">
+          <div class="calc-row">
+            <label>VOUS ENVOYEZ</label>
+            <div class="calc-input-wrap">
+              <input type="number" id="dSendAmt" value="200" class="calc-input"/>
+              <div class="currency-pill">
+                <img src="https://flagcdn.com/w40/us.png" alt="" width="20" height="14" class="flag-img" id="dSendFlag"/>
+                <select id="dSendCur" class="cur-select">
+                  <option value="USD" data-flag="us" selected>USD</option>
+                  <option value="EUR" data-flag="eu">EUR</option>
+                  <option value="GBP" data-flag="gb">GBP</option>
+                  <option value="CAD" data-flag="ca">CAD</option>
+                </select>
+                <i data-lucide="chevron-down" class="cur-arrow"></i>
+              </div>
+            </div>
+          </div>
+          <div class="calc-swap-row">
+            <div class="calc-swap-btn"><i data-lucide="arrow-down-up"></i></div>
+          </div>
+          <div class="calc-row">
+            <label>ILS RECOIVENT</label>
+            <div class="calc-input-wrap">
+              <span class="calc-output" id="dRecvAmt">118 400</span>
+              <div class="currency-pill recv-pill">
+                <img src="https://flagcdn.com/w40/bj.png" alt="" width="20" height="14" class="flag-img"/>
+                <span>XOF</span>
+              </div>
+            </div>
+          </div>
+          <div class="calc-fees-row">
+            <div class="fee-good"><i data-lucide="circle-check"></i> Frais : <strong>0.8%</strong> - Soit <strong id="dFee">1,60 USD</strong></div>
+            <div class="fee-warn"><i data-lucide="bell"></i> vs WU : jusqu'a <strong>22 USD</strong> de frais</div>
+          </div>
+        </div>
+
+        <button class="btn-primary-full" onclick="goScreen('d-transfer')">
+          Commencer un transfert <i data-lucide="arrow-right"></i>
+        </button>
+
+        <button class="btn-outline-full" onclick="goScreen('d-transfer')">
+          Voir la comparaison des frais
+        </button>
+
+        <!-- Recent Transfers -->
+        <div class="section-title">
+          <span>Transferts recents</span>
+          <a class="link-orange">VOIR TOUT</a>
+        </div>
+        <div class="tx-list" id="dRecentTx">
+          <div class="tx-item">
+            <div class="avatar avatar-orange-sm">MA</div>
+            <div class="tx-info">
+              <strong>Maman</strong>
+              <span>il y a 2 jours</span>
+            </div>
+            <span class="tx-amount">150 USD</span>
+          </div>
+          <div class="tx-item">
+            <div class="avatar avatar-green-sm">FR</div>
+            <div class="tx-info">
+              <strong>Frere Kofi</strong>
+              <span>il y a 1 semaine</span>
+            </div>
+            <span class="tx-amount">200 USD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D-Transfer (New) -->
+    <div class="screen" id="d-transfer">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('d-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center">
+            <strong>Nouveau transfert</strong>
+            <span class="topbar-sub">Etape 1 sur 3</span>
+          </div>
+          <button class="cancel-btn" onclick="goScreen('d-home')">Annuler</button>
+        </div>
+
+        <div class="transfer-form">
+          <!-- Sender Name -->
+          <div class="form-group">
+            <label class="form-label">Nom complet de l'expediteur</label>
+            <input type="text" id="tfSenderName" class="form-input" placeholder="Ex: Aminata Diallo" value=""/>
+          </div>
+
+          <!-- Sender Phone -->
+          <div class="form-group">
+            <label class="form-label">Numero de telephone (expediteur)</label>
+            <input type="tel" id="tfSenderPhone" class="form-input" placeholder="+33 6 00 00 00 00" value=""/>
+          </div>
+
+          <!-- Recipient Phone -->
+          <div class="form-group">
+            <label class="form-label">Numero du destinataire (Benin)</label>
+            <input type="tel" id="tfRecipientPhone" class="form-input" placeholder="+229 97 00 00 00" value=""/>
+          </div>
+
+          <!-- Amount -->
+          <div class="tf-row">
+            <label>Vous envoyez</label>
+            <div class="tf-input-wrap">
+              <input type="number" id="tfAmount" value="100" class="tf-input"/>
+              <div class="currency-pill tf-pill">
+                <img src="https://flagcdn.com/w40/eu.png" alt="" width="20" height="14" class="flag-img" id="tfCurFlag"/>
+                <select id="tfCurrency" class="cur-select" style="width:42px">
+                  <option value="USD" data-flag="us">USD</option>
+                  <option value="EUR" data-flag="eu" selected>EUR</option>
+                  <option value="GBP" data-flag="gb">GBP</option>
+                  <option value="CAD" data-flag="ca">CAD</option>
+                </select>
+                <i data-lucide="chevron-down" class="cur-arrow"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="rate-badge">
+            <div class="rate-icon"><i data-lucide="zap"></i></div>
+            <div>
+              <strong id="tfRateDisplay">1 EUR = 655,957 XOF</strong>
+              <span>Taux du marche en temps reel</span>
+            </div>
+          </div>
+
+          <div class="tf-row">
+            <div class="tf-recv-header">
+              <label>Destinataire recoit</label>
+              <span class="arrive-badge"><i data-lucide="clock"></i> Arrive en 30 min</span>
+            </div>
+            <div class="tf-input-wrap">
+              <span class="tf-output" id="tfRecv">65 596</span>
+              <div class="currency-pill tf-pill" style="background:var(--green-light)">
+                <div class="cur-circle cur-circle-green">F</div>
+                <span>XOF</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fee display -->
+          <div class="calc-fees-row" style="margin-bottom:12px">
+            <div class="fee-good"><i data-lucide="circle-check"></i> Frais : <strong>0.8%</strong> - Soit <strong id="tfFeeDisplay">0,80 EUR</strong></div>
+          </div>
+        </div>
+
+        <button class="btn-primary-full" onclick="startTransferFlow()">
+          Envoyer <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- D-OTP -->
+    <div class="screen" id="d-otp">
+      <div class="screen-scroll screen-centered">
+        <div class="screen-topbar" style="width:100%">
+          <button class="back-btn" onclick="goScreen('d-transfer')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center">
+            <strong>Verification OTP</strong>
+            <span class="topbar-sub">Etape 2 sur 3</span>
+          </div>
+          <div style="width:40px"></div>
+        </div>
+
+        <div class="otp-section">
+          <div class="otp-icon-wrap">
+            <i data-lucide="shield-check"></i>
+          </div>
+          <h3 class="otp-title">Code de verification</h3>
+          <p class="otp-sub">Entrez le code OTP a 6 chiffres envoye a <strong id="otpPhoneDisplay"></strong></p>
+
+          <div class="otp-inputs">
+            <input type="text" maxlength="1" class="otp-digit" data-idx="0" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="otp-digit" data-idx="1" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="otp-digit" data-idx="2" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="otp-digit" data-idx="3" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="otp-digit" data-idx="4" inputmode="numeric"/>
+            <input type="text" maxlength="1" class="otp-digit" data-idx="5" inputmode="numeric"/>
+          </div>
+
+          <p class="otp-hint">Pour la demo, utilisez le code : <strong>123456</strong></p>
+
+          <button class="btn-primary-full" id="btnVerifyOtp" onclick="verifyOTP()">
+            Verifier <i data-lucide="arrow-right"></i>
+          </button>
+
+          <button class="btn-outline-full" onclick="resendOTP()">
+            Renvoyer le code
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- D-Summary -->
+    <div class="screen" id="d-summary">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('d-otp')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center">
+            <strong>Confirmer le transfert</strong>
+            <span class="topbar-sub">Etape 3 sur 3</span>
+          </div>
+          <button class="cancel-btn" onclick="goScreen('d-home')">Annuler</button>
+        </div>
+
+        <div class="rate-badge" style="margin-top:16px;">
+          <div class="rate-icon"><i data-lucide="zap"></i></div>
+          <div>
+            <strong id="sumRateDisplay">1 EUR = 655,957 XOF</strong>
+            <span>Taux du marche en temps reel</span>
+          </div>
+        </div>
+
+        <div class="summary-recv">
+          <div class="summary-recv-header">
+            <label>Destinataire recoit</label>
+            <span class="arrive-badge"><i data-lucide="clock"></i> Arrive en 30 min</span>
+          </div>
+          <div class="summary-recv-amount">
+            <span class="big-amount" id="sumRecvAmount">65 596</span>
+            <div class="currency-pill tf-pill" style="background:var(--green-light)">
+              <div class="cur-circle cur-circle-green">F</div>
+              <span>XOF</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card fee-summary-card">
+          <h4>Resume des frais</h4>
+          <div class="fee-row"><span>Expediteur</span><strong id="sumSenderName">-</strong></div>
+          <div class="fee-row"><span>Destinataire</span><strong id="sumRecipientPhone">-</strong></div>
+          <div class="fee-row"><span>Montant envoye</span><strong id="sumSentAmount">100 EUR</strong></div>
+          <div class="fee-row"><span>Frais (0.8%)</span><strong id="sumFeeAmount" class="green-text">0,80 EUR</strong></div>
+          <div class="fee-row fee-total"><span>Total debite</span><strong id="sumTotalAmount">100,80 EUR</strong></div>
+        </div>
+
+        <div class="security-banner">
+          <div class="sec-icon"><i data-lucide="shield"></i></div>
+          <div>
+            <strong>Transaction securisee</strong>
+            <span>Chiffrement de bout en bout via blockchain</span>
+          </div>
+          <div class="sec-icon-r"><i data-lucide="fingerprint"></i></div>
+        </div>
+
+        <button class="btn-primary-full" id="btnConfirmTransfer" onclick="confirmTransfer()" style="margin-top:16px;">
+          Confirmer l'envoi <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- D-Sent -->
+    <div class="screen" id="d-sent">
+      <div class="screen-scroll screen-centered">
+        <div class="sent-check">
+          <div class="sent-check-circle">
+            <i data-lucide="check"></i>
+          </div>
+        </div>
+        <h2 class="sent-title">Transfert envoye !</h2>
+        <p class="sent-sub" id="sentSubText">Votre destinataire va recevoir les fonds dans quelques minutes</p>
+
+        <div class="card sent-details-card">
+          <div class="sent-amount-row">
+            <span class="sent-label">Montant recu par le destinataire</span>
+            <div class="sent-big-amount" id="sentAmountXof">65 596 <span class="sent-cur">XOF</span></div>
+            <span class="sent-equiv" id="sentAmountOrig">(100 EUR)</span>
+          </div>
+          <div class="sent-detail"><span>De</span><strong id="sentFrom">-</strong></div>
+          <div class="sent-detail"><span>A</span><strong id="sentTo">-</strong></div>
+          <div class="sent-detail"><span>Frais</span><strong id="sentFees" class="green-text">-</strong></div>
+          <div class="sent-detail"><span>Statut</span><span class="status-badge"><span class="status-dot"></span> <span id="sentStatus">En cours de traitement</span></span></div>
+          <div class="sent-detail"><span>ID Transaction</span><span class="tx-id" id="sentTxId">- <i data-lucide="copy" class="copy-icon" onclick="copyTxId()"></i></span></div>
+        </div>
+
+        <div class="arrive-info">
+          <i data-lucide="clock" class="arrive-icon"></i>
+          <div>
+            <strong>Arrivee estimee</strong>
+            <span>Dans moins de 30 minutes</span>
+          </div>
+        </div>
+
+        <button class="btn-primary-full" onclick="resetDiaspora()" style="margin-top:24px;">
+          Retour a l'accueil <i data-lucide="arrow-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- D-Profile -->
+    <div class="screen" id="d-profile">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('d-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center"><strong>Mon Profil</strong></div>
+          <div style="width:40px"></div>
+        </div>
+
+        <div class="profile-header">
+          <div class="profile-avatar">
+            <div class="avatar avatar-big">KM</div>
+            <div class="verified-check"><i data-lucide="check-circle"></i></div>
+          </div>
+          <h3 class="profile-name">Kofi Mensah</h3>
+          <span class="profile-email">kofi.mensah@email.com</span>
+          <div class="profile-badges">
+            <span class="badge badge-green"><i data-lucide="shield-check"></i> Verifie</span>
+            <span class="badge badge-orange">Premium</span>
+          </div>
+        </div>
+
+        <div class="profile-stats">
+          <div class="pstat"><strong>24</strong><span>ce mois</span></div>
+          <div class="pstat"><strong>186<br/>EUR</strong><span>vs banques</span></div>
+          <div class="pstat"><strong>4.9</strong><span>satisfaction</span></div>
+        </div>
+
+        <div class="menu-section-title">COMPTE</div>
+        <div class="menu-list">
+          <div class="menu-item"><i data-lucide="user"></i><span>Informations personnelles</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+          <div class="menu-item"><i data-lucide="shield"></i><span>Securite</span><span class="badge badge-green-sm">KYC Verifie</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+          <div class="menu-item"><i data-lucide="credit-card"></i><span>Methodes de paiement</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+        </div>
+
+        <div class="menu-section-title">PREFERENCES</div>
+        <div class="menu-list">
+          <div class="menu-item"><i data-lucide="bell"></i><span>Notifications</span><div class="toggle"><div class="toggle-knob"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D-History -->
+    <div class="screen" id="d-history">
+      <div class="screen-scroll">
+        <div class="d-home-header" style="padding-top:16px;">
+          <h2 style="font-size:1.3rem;font-weight:800;color:#0F172A;">Historique</h2>
+        </div>
+        <div class="tx-list" id="dHistoryTx">
+          <div class="tx-item"><div class="avatar avatar-orange-sm">MA</div><div class="tx-info"><strong>Maman</strong><span>Aujourd'hui</span></div><span class="tx-amount">100 EUR</span></div>
+          <div class="tx-item"><div class="avatar avatar-green-sm">FR</div><div class="tx-info"><strong>Frere Kofi</strong><span>Hier</span></div><span class="tx-amount">200 USD</span></div>
+          <div class="tx-item"><div class="avatar avatar-orange-sm">MA</div><div class="tx-info"><strong>Maman</strong><span>il y a 3 jours</span></div><span class="tx-amount">150 EUR</span></div>
+          <div class="tx-item"><div class="avatar avatar-purple-sm">SO</div><div class="tx-info"><strong>Soeur Ada</strong><span>il y a 1 semaine</span></div><span class="tx-amount">75 USD</span></div>
+          <div class="tx-item"><div class="avatar avatar-green-sm">FR</div><div class="tx-info"><strong>Frere Kofi</strong><span>il y a 2 semaines</span></div><span class="tx-amount">300 EUR</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav" id="dNav">
+    <button class="bnav-item active" onclick="goScreen('d-home')"><i data-lucide="home"></i><span>Accueil</span></button>
+    <button class="bnav-item" onclick="goScreen('d-transfer')"><i data-lucide="send"></i><span>Envoyer</span></button>
+    <button class="bnav-item" onclick="goScreen('d-history')"><i data-lucide="clock"></i><span>Historique</span></button>
+    <button class="bnav-item" onclick="goScreen('d-profile')"><i data-lucide="user"></i><span>Profil</span></button>
+  </nav>
+
+  <button class="switch-portal-fab" onclick="showPortalSelector()"><i data-lucide="repeat"></i></button>
+</div>
+
+<!-- ===== BENIN APP ===== -->
+<div id="beninApp" class="app-shell">
+  <div class="app-screens">
+
+    <!-- B-Home -->
+    <div class="screen active" id="b-home">
+      <div class="screen-scroll">
+        <div class="b-hero-card">
+          <div class="b-hero-top">
+            <div>
+              <h2 class="b-greeting">Bonjour, Koffi <span class="wave">&#128075;</span></h2>
+              <p class="b-greeting-sub">Votre solde disponible</p>
+            </div>
+            <button class="avatar-btn" onclick="goScreen('b-profile')">
+              <div class="avatar avatar-green-border">KF</div>
+            </button>
+          </div>
+          <div class="b-balance" id="bBalance">345 500 <span class="b-cur">XOF</span></div>
+        </div>
+
+        <div class="b-actions">
+          <button class="b-action" onclick="goScreen('b-receive')">
+            <div class="b-action-icon"><i data-lucide="download"></i></div>
+            <span>Recevoir</span>
+          </button>
+          <button class="b-action" onclick="goScreen('b-bills')">
+            <div class="b-action-icon"><i data-lucide="file-text"></i></div>
+            <span>Factures</span>
+          </button>
+          <button class="b-action" onclick="goScreen('b-withdraw')">
+            <div class="b-action-icon b-action-icon-plus"><i data-lucide="plus"></i></div>
+            <span>Retirer</span>
+          </button>
+        </div>
+
+        <div class="b-merchant-card">
+          <h3>Paiement Marchand</h3>
+          <p>Payez vos achats locaux sans frais via QR Code.</p>
+          <button class="b-scan-btn"><i data-lucide="qr-code"></i> Scanner</button>
+        </div>
+
+        <div class="section-title">
+          <span>Dernieres operations</span>
+          <a class="link-green">VOIR TOUT</a>
+        </div>
+        <div class="tx-list" id="bRecentTx">
+          <div class="tx-item">
+            <div class="avatar avatar-green-sm">AM</div>
+            <div class="tx-info"><strong>Aminata (Diaspora)</strong><span>A l'instant</span></div>
+            <span class="tx-amount tx-positive">+ 118 400 XOF</span>
+          </div>
+          <div class="tx-item">
+            <div class="avatar avatar-gray-sm">SB</div>
+            <div class="tx-info"><strong>Paiement SBEE</strong><span>Hier</span></div>
+            <span class="tx-amount tx-negative">- 15 000 XOF</span>
+          </div>
+          <div class="tx-item">
+            <div class="avatar avatar-green-sm">KM</div>
+            <div class="tx-info"><strong>Kofi (Diaspora)</strong><span>il y a 3 jours</span></div>
+            <span class="tx-amount tx-positive">+ 65 596 XOF</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B-Receive (Search Transfer) -->
+    <div class="screen" id="b-receive">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('b-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center"><strong>Recevoir un transfert</strong></div>
+          <div style="width:40px"></div>
+        </div>
+
+        <div class="receive-icon" style="margin:20px auto 0"><i data-lucide="search"></i></div>
+        <h3 style="margin:16px 0 8px;font-size:1.1rem;color:#0F172A;text-align:center;">Rechercher un transfert</h3>
+        <p style="color:#6B7280;font-size:.85rem;text-align:center;margin-bottom:20px;">Entrez votre numero de telephone ou l'ID du transfert</p>
+
+        <div class="form-group">
+          <label class="form-label">Votre numero de telephone</label>
+          <input type="tel" id="bSearchPhone" class="form-input" placeholder="+229 97 00 00 00"/>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;margin:12px 0">
+          <div style="flex:1;height:1px;background:var(--g200)"></div>
+          <span style="font-size:.78rem;color:var(--g400);font-weight:600">OU</span>
+          <div style="flex:1;height:1px;background:var(--g200)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ID de transaction</label>
+          <input type="text" id="bSearchTxId" class="form-input" placeholder="Ex: TXN-2026-XXXX"/>
+        </div>
+
+        <button class="btn-green-full" onclick="searchTransfer()" id="btnSearchTransfer">
+          <i data-lucide="search"></i> Rechercher
+        </button>
+
+        <!-- Results area -->
+        <div id="bSearchResults" style="margin-top:20px;display:none;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- B-Bills -->
+    <div class="screen" id="b-bills">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('b-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center"><strong>Factures</strong></div>
+          <div style="width:40px"></div>
+        </div>
+        <div class="bills-list">
+          <div class="bill-item"><div class="bill-icon bill-elec"><i data-lucide="zap"></i></div><div class="bill-info"><strong>SBEE - Electricite</strong><span>Facture du mois</span></div><strong class="bill-amount">15 000 XOF</strong><button class="bill-pay-btn" onclick="payBill('SBEE - Electricite', 15000)">Payer</button></div>
+          <div class="bill-item"><div class="bill-icon bill-water"><i data-lucide="droplets"></i></div><div class="bill-info"><strong>SONEB - Eau</strong><span>Facture du mois</span></div><strong class="bill-amount">8 500 XOF</strong><button class="bill-pay-btn" onclick="payBill('SONEB - Eau', 8500)">Payer</button></div>
+          <div class="bill-item"><div class="bill-icon bill-phone"><i data-lucide="smartphone"></i></div><div class="bill-info"><strong>MTN - Mobile</strong><span>Recharge</span></div><strong class="bill-amount">5 000 XOF</strong><button class="bill-pay-btn" onclick="payBill('MTN - Mobile', 5000)">Payer</button></div>
+          <div class="bill-item"><div class="bill-icon bill-tv"><i data-lucide="tv"></i></div><div class="bill-info"><strong>Canal+ - TV</strong><span>Abonnement</span></div><strong class="bill-amount">12 000 XOF</strong><button class="bill-pay-btn" onclick="payBill('Canal+ - TV', 12000)">Payer</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B-Withdraw -->
+    <div class="screen" id="b-withdraw">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('b-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center"><strong>Retirer vers Mobile Money</strong></div>
+          <div style="width:40px"></div>
+        </div>
+
+        <!-- Step 1: Search transfer for withdrawal -->
+        <div id="bWithdrawStep1">
+          <div class="card" style="margin-top:16px;padding:20px;">
+            <h4 style="font-size:.95rem;font-weight:700;color:var(--dark);margin-bottom:12px;">Rechercher votre transfert</h4>
+            <div class="form-group" style="margin-bottom:12px">
+              <label class="form-label">Votre numero de telephone</label>
+              <input type="tel" id="bWithdrawPhone" class="form-input" placeholder="+229 97 00 00 00"/>
+            </div>
+            <button class="btn-green-full" onclick="searchForWithdraw()">
+              <i data-lucide="search"></i> Chercher mes transferts
+            </button>
+          </div>
+
+          <div id="bWithdrawResults" style="margin-top:16px;display:none;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Step 2: Choose withdrawal method (shown after selecting a transfer) -->
+        <div id="bWithdrawStep2" style="display:none">
+          <div class="card" style="margin-top:16px;padding:20px;text-align:center;">
+            <label style="font-size:.75rem;font-weight:600;color:#9CA3AF;text-transform:uppercase;">Montant a retirer</label>
+            <div style="display:flex;align-items:baseline;justify-content:center;gap:8px;margin:12px 0;">
+              <span id="bWithdrawAmount" style="font-size:2.2rem;font-weight:800;color:var(--dark);">0</span>
+              <span style="font-size:1.1rem;font-weight:700;color:#6B7280;">XOF</span>
+            </div>
+            <p style="font-size:.82rem;color:#9CA3AF;">Transaction : <span id="bWithdrawTxRef">-</span></p>
+          </div>
+
+          <h4 style="font-size:.88rem;font-weight:700;color:var(--dark);margin:16px 0 8px;">Choisir le mode de retrait</h4>
+          <div class="withdraw-methods">
+            <div class="wm-item" onclick="showWithdrawModal('MTN MoMo')">
+              <div class="wm-icon wm-mtn">MTN</div>
+              <div><strong>MTN Mobile Money</strong><span>Retrait instantane</span></div>
+              <i data-lucide="chevron-right" class="menu-arrow"></i>
+            </div>
+            <div class="wm-item" onclick="showWithdrawModal('Moov Money')">
+              <div class="wm-icon wm-moov">M</div>
+              <div><strong>Moov Money</strong><span>Retrait instantane</span></div>
+              <i data-lucide="chevron-right" class="menu-arrow"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Withdraw success -->
+        <div id="bWithdrawStep3" style="display:none">
+          <div style="text-align:center;padding-top:40px;">
+            <div class="sent-check">
+              <div class="sent-check-circle" style="margin:0 auto">
+                <i data-lucide="check"></i>
+              </div>
+            </div>
+            <h2 class="sent-title" style="margin-top:16px">Retrait reussi !</h2>
+            <p class="sent-sub">Les fonds ont ete envoyes sur votre compte Mobile Money</p>
+
+            <div class="card sent-details-card" style="text-align:left">
+              <div class="sent-amount-row">
+                <span class="sent-label">Montant retire</span>
+                <div class="sent-big-amount" id="wdSuccessAmount">0 <span class="sent-cur">XOF</span></div>
+              </div>
+              <div class="sent-detail"><span>Operateur</span><strong id="wdSuccessOperator">-</strong></div>
+              <div class="sent-detail"><span>Numero</span><strong id="wdSuccessPhone">-</strong></div>
+              <div class="sent-detail"><span>Reference</span><span class="tx-id" id="wdSuccessRef">-</span></div>
+              <div class="sent-detail"><span>Statut</span><span class="status-badge"><span class="status-dot"></span> Complete</span></div>
+            </div>
+
+            <button class="btn-green-full" onclick="resetBenin()" style="margin-top:20px;">
+              Retour a l'accueil <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B-Profile -->
+    <div class="screen" id="b-profile">
+      <div class="screen-scroll">
+        <div class="screen-topbar">
+          <button class="back-btn" onclick="goScreen('b-home')"><i data-lucide="arrow-left"></i></button>
+          <div class="topbar-center"><strong>Mon Profil</strong></div>
+          <div style="width:40px"></div>
+        </div>
+        <div class="profile-header">
+          <div class="profile-avatar">
+            <div class="avatar avatar-big avatar-green-bg">KF</div>
+          </div>
+          <h3 class="profile-name">Koffi Adjakou</h3>
+          <span class="profile-email">koffi.adjakou@email.com</span>
+          <div class="profile-badges">
+            <span class="badge badge-green"><i data-lucide="shield-check"></i> Verifie</span>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="pstat"><strong>345 500</strong><span>XOF solde</span></div>
+          <div class="pstat"><strong>12</strong><span>receptions</span></div>
+          <div class="pstat"><strong>4.8</strong><span>satisfaction</span></div>
+        </div>
+        <div class="menu-section-title">COMPTE</div>
+        <div class="menu-list">
+          <div class="menu-item"><i data-lucide="user"></i><span>Informations personnelles</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+          <div class="menu-item"><i data-lucide="shield"></i><span>Securite</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+          <div class="menu-item"><i data-lucide="smartphone"></i><span>Mobile Money</span><i data-lucide="chevron-right" class="menu-arrow"></i></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Nav Benin -->
+  <nav class="bottom-nav bottom-nav-green" id="bNav">
+    <button class="bnav-item active" onclick="goScreen('b-home')"><i data-lucide="home"></i><span>Accueil</span></button>
+    <button class="bnav-item" onclick="goScreen('b-receive')"><i data-lucide="download"></i><span>Recevoir</span></button>
+    <button class="bnav-item" onclick="goScreen('b-bills')"><i data-lucide="file-text"></i><span>Factures</span></button>
+    <button class="bnav-item" onclick="goScreen('b-withdraw')"><i data-lucide="plus-circle"></i><span>Retirer</span></button>
+  </nav>
+
+  <button class="switch-portal-fab switch-portal-fab-green" onclick="showPortalSelector()"><i data-lucide="repeat"></i></button>
+</div>
+
+<script>
+  // Backend API URL - set this to your deployed Render backend URL
+  // Example: window.DIASPORA_API_URL = 'https://diasporaconnect-api.onrender.com';
+  // Leave empty or unset for mock/demo mode (fully functional prototype without backend)
+</script>
+<script src="app-script.js"></script>
+  <script>
+    // Enregistrement du Service Worker PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('[PWA] Service Worker enregistré:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('[PWA] Erreur:', error);
+          });
+      });
+    }
+  </script>
+</body>
+</html>

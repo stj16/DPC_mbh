@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#F97316"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>DiasporaConnect Mobile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #F97316;
+      --primary-dark: #EA580C;
+      --bg: #0F172A;
+      --surface: #1E293B;
+      --surface-light: #334155;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --success: #22C55E;
+      --error: #EF4444;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+    }
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      max-width: 430px;
+      margin: 0 auto;
+      position: relative;
+      background: var(--bg);
+    }
+    .header {
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-icon svg { width: 20px; height: 20px; }
+    .logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+    }
+    .badge {
+      background: rgba(255,255,255,0.2);
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .screen {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 16px;
+    }
+    .screen.active { display: flex; }
+    .welcome {
+      text-align: center;
+      padding: 32px 16px;
+    }
+    .welcome h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .welcome p { color: var(--text-muted); margin-bottom: 32px; }
+    .portal-btn {
+      width: 100%;
+      padding: 20px;
+      margin-bottom: 12px;
+      border: none;
+      border-radius: 16px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+    }
+    .portal-btn:hover { background: var(--surface-light); }
+    .portal-btn svg {
+      width: 32px; height: 32px;
+      padding: 8px;
+      background: var(--primary);
+      border-radius: 10px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: auto;
+    }
+    .btn-primary:active { transform: scale(0.98); }
+    .balance-card {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      padding: 24px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .balance-label { font-size: 13px; opacity: 0.8; }
+    .balance-amount {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 36px;
+      font-weight: 700;
+      margin: 8px 0;
+    }
+    .balance-currency { font-size: 14px; opacity: 0.8; }
+    .input-group { margin-bottom: 16px; }
+    .input-group label { display: block; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
+    .input-field {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--surface-light);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text);
+      font-size: 16px;
+    }
+    .input-field:focus { outline: none; border-color: var(--primary); }
+    .currency-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .currency-btn {
+      flex: 1;
+      padding: 12px;
+      border: 1px solid var(--surface-light);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .currency-btn.active {
+      border-color: var(--primary);
+      background: rgba(249, 115, 22, 0.1);
+      color: var(--primary);
+    }
+    .amount-display {
+      text-align: center;
+      padding: 24px;
+      background: var(--surface);
+      border-radius: 16px;
+      margin: 24px 0;
+    }
+    .amount-label { font-size: 14px; color: var(--text-muted); }
+    .amount-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--success);
+    }
+    .amount-sub { font-size: 14px; color: var(--text-muted); }
+    .fee-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--surface);
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--surface);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+    .history-icon {
+      width: 40px; height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: 20px;
+    }
+    .history-icon.send { background: rgba(239, 68, 68, 0.1); }
+    .history-icon.receive { background: rgba(34, 197, 94, 0.1); }
+    .history-details { flex: 1; }
+    .history-name { font-weight: 600; margin-bottom: 4px; }
+    .history-date { font-size: 12px; color: var(--text-muted); }
+    .history-amount { font-weight: 600; font-size: 16px; }
+    .history-amount.negative { color: var(--error); }
+    .history-amount.positive { color: var(--success); }
+    .bottom-nav {
+      display: flex;
+      background: var(--surface);
+      padding: 8px;
+      gap: 4px;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 12px 8px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-btn.active { color: var(--primary); background: rgba(249, 115, 22, 0.1); }
+    .nav-btn svg { width: 20px; height: 20px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span class="logo-text">DiasporaConnect</span>
+      </div>
+      <span class="badge">LumniX</span>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div class="screen active" id="welcome">
+      <div class="welcome">
+        <h1>Bienvenue 👋</h1>
+        <p>Choisissez comment utiliser l'application</p>
+        
+        <button class="portal-btn" onclick="showScreen('send')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+          <div style="text-align:left">
+            <div>Portail Diaspora</div>
+            <span style="font-size:12px;color:var(--text-muted)">Envoyer de l'argent vers le Benin</span>
+          </div>
+        </button>
+        
+        <button class="portal-btn" onclick="showScreen('receive')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          <div style="text-align:left">
+            <div>Portail Benin</div>
+            <span style="font-size:12px;color:var(--text-muted)">Recevoir et retirer en especes</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Send Screen -->
+    <div class="screen" id="send">
+      <div class="balance-card">
+        <div class="balance-label">Vous envoyez</div>
+        <div class="input-field" style="font-size:24px;font-weight:700;text-align:center" id="sendAmount">0</div>
+        <div class="currency-row">
+          <button class="currency-btn active" onclick="setCurrency('USD')">USD</button>
+          <button class="currency-btn" onclick="setCurrency('EUR')">EUR</button>
+          <button class="currency-btn" onclick="setCurrency('GBP')">GBP</button>
+        </div>
+      </div>
+      
+      <div class="input-group">
+        <label>Telephone du destinataire (Benin)</label>
+        <input class="input-field" placeholder="+229 XX XXX XXXX" id="recipientPhone"/>
+      </div>
+      
+      <div class="amount-display">
+        <div class="amount-label">Le destinataire recoit</div>
+        <div class="amount-value" id="receiveAmount">0</div>
+        <div class="amount-sub">XOF • Frais: 0.8%</div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen('confirm')">Continuer</button>
+    </div>
+
+    <!-- Receive Screen -->
+    <div class="screen" id="receive">
+      <div class="balance-card">
+        <div class="balance-label">Votre solde disponible</div>
+        <div class="balance-amount">345 500</div>
+        <div class="balance-currency">XOF</div>
+      </div>
+      
+      <button class="btn-primary" style="margin-bottom:12px" onclick="alert('Recherche de transfert...')">
+        Recevoir un transfert
+      </button>
+      
+      <div style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Dernieres operations</div>
+      
+      <div class="history-item">
+        <div class="history-icon receive">💰</div>
+        <div class="history-details">
+          <div class="history-name">Kofi (Diaspora)</div>
+          <div class="history-date">Il y a 3 jours</div>
+        </div>
+        <div class="history-amount positive">+65 596 XOF</div>
+      </div>
+    </div>
+
+    <!-- Confirm Screen -->
+    <div class="screen" id="confirm">
+      <div class="welcome">
+        <h1>Confirmer</h1>
+        <p>Verifiez les informations avant d'envoyer</p>
+        
+        <div class="amount-display">
+          <div class="amount-label">Montant envoye</div>
+          <div class="amount-value" id="confirmSend" style="font-size:32px">100 USD</div>
+        </div>
+        
+        <div class="fee-row">
+          <span>Frais (0.8%)</span>
+          <span>0.80 USD</span>
+        </div>
+        <div class="fee-row">
+          <span>Destinataire recoit</span>
+          <span style="color:var(--success)">59 200 XOF</span>
+        </div>
+        
+        <button class="btn-primary" onclick="showScreen('success')" style="margin-top:24px">Confirmer l'envoi</button>
+        <button onclick="showScreen('send')" style="background:transparent;border:none;color:var(--text-muted);margin-top:12px;cursor:pointer">Retour</button>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="screen" id="success">
+      <div class="welcome">
+        <div style="font-size:64px;margin-bottom:16px">✅</div>
+        <h1>Transfert Envoyé!</h1>
+        <p>Votre destinataire va recevoir les fonds dans quelques minutes</p>
+        
+        <div class="amount-display">
+          <div class="amount-label">Montant recu</div>
+          <div class="amount-value">59 200 XOF</div>
+          <div class="amount-sub">Via MTN Mobile Money</div>
+        </div>
+        
+        <button class="btn-primary" onclick="showScreen('welcome')">Retour a l'accueil</button>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-btn" onclick="showScreen('send')" data-screen="send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Envoyer
+      </button>
+      <button class="nav-btn" onclick="showScreen('receive')" data-screen="receive">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Compte
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const rates = { USD: 592, EUR: 656, GBP: 746, CAD: 435 };
+    let currency = 'USD';
+    let amount = 100;
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function setCurrency(curr) {
+      currency = curr;
+      document.querySelectorAll('.currency-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      updateAmounts();
+    }
+
+    function updateAmounts() {
+      document.getElementById('sendAmount').textContent = amount;
+      const xof = Math.round(amount * rates[currency] * 0.992);
+      document.getElementById('receiveAmount').textContent = xof.toLocaleString();
+      document.getElementById('confirmSend').textContent = amount + ' ' + currency;
+    }
+
+    document.getElementById('sendAmount').addEventListener('input', function(e) {
+      amount = parseInt(e.target.value) || 0;
+      updateAmounts();
+    });
+
+    // Init
+    updateAmounts();
+  </script>
+</body>
+</html>

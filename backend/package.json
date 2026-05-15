@@ -1,0 +1,35 @@
+{
+  "name": "diasporaconnect-backend",
+  "version": "1.0.0",
+  "description": "DiasporaConnect API - Transferts d'argent vers le Benin via blockchain",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "db:push": "npx prisma db push",
+    "db:generate": "npx prisma generate",
+    "db:studio": "npx prisma studio",
+    "db:migrate": "npx prisma migrate dev",
+    "postinstall": "npx prisma generate"
+  },
+  "keywords": ["diaspora", "blockchain", "polygon", "benin", "transfer"],
+  "author": "LumniX",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "axios": "^1.15.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "ethers": "^6.16.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "node-cron": "^4.2.1",
+    "prisma": "^5.22.0",
+    "twilio": "^6.0.0",
+    "uuid": "^14.0.0"
+  }
+}

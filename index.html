@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DiasporaConnect — Transferts d'argent vers le Benin, sans frais excessifs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js" defer></script>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#16213e"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="DiasporaConnect"/>
+  <link rel="apple-touch-icon" href="assets/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icon-192.png"/>
+  <link rel="apple-touch-icon" sizes="512x512" href="assets/icon-512.png"/>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <div class="container nav-container">
+    <a href="#" class="logo">
+      <svg class="logo-svg" width="36" height="36" viewBox="0 0 40 40" fill="none">
+        <rect width="40" height="40" rx="12" fill="url(#lg)"/>
+        <path d="M12 14C12 14 16 10 20 10C26 10 28 14 28 18C28 24 20 30 20 30C20 30 12 24 12 18" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <path d="M17 18L20 21L27 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="30" cy="12" r="5" fill="#16A34A"/><path d="M28 12H32M30 10V14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#F97316"/><stop offset="1" stop-color="#EA580C"/></linearGradient></defs>
+      </svg>
+      <span class="logo-text">Diaspora<strong>Connect</strong></span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#fonctionnalites">Fonctionnalites</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#demo">Application</a>
+      <a href="#securite">Securite</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-actions" id="navActions">
+      <a href="app.html" class="btn btn-primary btn-nav"><i data-lucide="smartphone" style="width:16px;height:16px;"></i> Tester l'app</a>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+    <div class="hero-orb orb-3"></div>
+    <div class="hero-orb orb-4"></div>
+  </div>
+  <div class="container">
+    <div class="hero-top">
+      <div class="hero-badge"><i data-lucide="star" style="width:14px;height:14px;"></i> Equipe LumniX — MIABE 2026</div>
+      <h1>Transferts <span class="gradient-text">Rapides</span> <span class="gradient-text2">Surs</span> &amp; <span class="gradient-text3">Sans Frais</span> vers le Benin</h1>
+      <p class="hero-subtitle">Envoyez de l'argent a vos proches au Benin avec seulement <strong>0.8% de frais</strong>, securise par la blockchain. Recevez en Mobile Money en moins de 30 minutes.</p>
+      <div class="hero-buttons">
+        <a href="app.html" class="btn btn-primary btn-lg"><i data-lucide="send" style="width:18px;height:18px;"></i> Commencer un transfert</a>
+        <a href="#demo" class="btn btn-glass btn-lg"><i data-lucide="play-circle" style="width:18px;height:18px;"></i> Voir la demo</a>
+      </div>
+    </div>
+
+    <!-- Floating phones hero -->
+    <div class="hero-phones">
+      <div class="hero-float-card float-card-1">
+        <div class="float-card-icon fc-green"><i data-lucide="check-circle" style="width:20px;height:20px;"></i></div>
+        <div>
+          <span class="float-card-title">Transfert reussi</span>
+          <span class="float-card-val">118 400 XOF</span>
+        </div>
+      </div>
+      <div class="hero-float-card float-card-2">
+        <div class="float-card-icon fc-orange"><i data-lucide="zap" style="width:20px;height:20px;"></i></div>
+        <div>
+          <span class="float-card-title">Frais</span>
+          <span class="float-card-val">0.8% seulement</span>
+        </div>
+      </div>
+      <div class="hero-float-card float-card-3">
+        <div class="float-card-icon fc-purple"><i data-lucide="shield-check" style="width:20px;height:20px;"></i></div>
+        <div>
+          <span class="float-card-title">Securite</span>
+          <span class="float-card-val">Blockchain AES-256</span>
+        </div>
+      </div>
+      <div class="iphone-hero iphone-hero-main">
+        <div class="iphone-notch-h"></div>
+        <div class="iphone-screen-h"><img src="assets/screens/diaspora-home.png" alt="Diaspora Home"/></div>
+      </div>
+      <div class="iphone-hero iphone-hero-left">
+        <div class="iphone-notch-h"></div>
+        <div class="iphone-screen-h"><img src="assets/screens/benin-home.png" alt="Benin Home"/></div>
+      </div>
+      <div class="iphone-hero iphone-hero-right">
+        <div class="iphone-notch-h"></div>
+        <div class="iphone-screen-h"><img src="assets/screens/diaspora-transfer.png" alt="Transfert"/></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section" data-animate-section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Comment ca marche</span>
+      <h2>Transfert digital intelligent pour la <span class="gradient-text">diaspora</span></h2>
+      <p>Envoyez de l'argent en 3 etapes simples. Pas de papiers, pas d'agence, tout depuis votre telephone.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card" data-animate="fade-up">
+        <div class="step-num">1</div>
+        <div class="step-icon-wrap si-orange"><i data-lucide="user-plus"></i></div>
+        <h3>Choisissez votre portail</h3>
+        <p>Diaspora (envoyeur) ou Benin (destinataire). Pas de compte requis pour tester.</p>
+      </div>
+      <div class="step-card" data-animate="fade-up" data-delay=".1">
+        <div class="step-num">2</div>
+        <div class="step-icon-wrap si-purple"><i data-lucide="calculator"></i></div>
+        <h3>Calculez & envoyez</h3>
+        <p>Entrez le montant, voyez le taux en temps reel, et confirmez le transfert en un clic.</p>
+      </div>
+      <div class="step-card" data-animate="fade-up" data-delay=".2">
+        <div class="step-num">3</div>
+        <div class="step-icon-wrap si-green"><i data-lucide="wallet"></i></div>
+        <h3>Reception instantanee</h3>
+        <p>Votre proche recoit les fonds sur Mobile Money (MTN/Moov) en moins de 30 minutes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CALCULATOR + PHONE ===== -->
+<section class="calc-section" id="fonctionnalites" data-animate-section>
+  <div class="container calc-grid">
+    <div class="calc-content" data-animate="fade-up">
+      <span class="section-tag">Calculateur en direct</span>
+      <h2>Voyez exactement combien vos proches recoivent</h2>
+      <p class="calc-desc">Taux du marche en temps reel. Pas de frais caches, pas de surprises.</p>
+      <div class="calculator">
+        <div class="calc-row">
+          <label>VOUS ENVOYEZ</label>
+          <div class="calc-input-group">
+            <input type="number" id="sendAmount" value="200" placeholder="200"/>
+            <div class="currency-select">
+              <img src="https://flagcdn.com/w40/us.png" alt="USD" class="currency-flag" id="sendFlag" width="24" height="16"/>
+              <select id="sendCurrency">
+                <option value="USD" selected>USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="CAD">CAD</option>
+              </select>
+              <i data-lucide="chevron-down" class="cs-arrow"></i>
+            </div>
+          </div>
+        </div>
+        <div class="calc-divider"><div class="calc-swap"><button class="swap-btn"><i data-lucide="arrow-down-up"></i></button></div></div>
+        <div class="calc-row">
+          <label>ILS RECOIVENT</label>
+          <div class="calc-input-group">
+            <span class="calc-result" id="receiveAmount">118 400</span>
+            <div class="currency-select recv-select">
+              <img src="https://flagcdn.com/w40/bj.png" alt="XOF" class="currency-flag" width="24" height="16"/>
+              <span class="cs-code">XOF</span>
+            </div>
+          </div>
+        </div>
+        <div class="calc-fees">
+          <div class="fee-line fee-ours"><i data-lucide="circle-check" class="fee-icon"></i> Frais : <strong>0.8%</strong> — Soit <strong id="ourFee">1,60 USD</strong></div>
+          <div class="fee-line fee-theirs"><i data-lucide="alert-triangle" class="fee-icon"></i> vs WU : jusqu'a <strong>22 USD</strong> de frais</div>
+        </div>
+        <a href="app.html" class="btn btn-primary btn-full btn-lg calc-cta">Commencer un transfert <i data-lucide="arrow-right" style="width:18px;height:18px;"></i></a>
+      </div>
+    </div>
+    <div class="calc-visual" data-animate="fade-left">
+      <div class="calc-phone-wrap">
+        <div class="iphone-frame-lg">
+          <div class="iphone-notch-lg"></div>
+          <div class="iphone-screen-lg"><img src="assets/screens/diaspora-summary.png" alt="Resume transfert"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURES ===== -->
+<section class="features-section" data-animate-section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Fonctionnalites</span>
+      <h2>Tout ce qu'il faut pour <span class="gradient-text2">envoyer</span> et <span class="gradient-text">recevoir</span></h2>
+      <p>Une application pensee pour la diaspora africaine et ses proches au Benin.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-animate="fade-up">
+        <div class="feature-icon-wrap fi-orange"><i data-lucide="send"></i></div>
+        <h3>Transferts instantanes</h3>
+        <p>Envoyez de l'argent et votre destinataire le recoit en moins de 30 minutes.</p>
+      </div>
+      <div class="feature-card" data-animate="fade-up" data-delay=".06">
+        <div class="feature-icon-wrap fi-purple"><i data-lucide="piggy-bank"></i></div>
+        <h3>Frais quasi nuls</h3>
+        <p>Seulement 0.8% de frais contre 7-15% chez les concurrents.</p>
+      </div>
+      <div class="feature-card" data-animate="fade-up" data-delay=".12">
+        <div class="feature-icon-wrap fi-pink"><i data-lucide="shield-check"></i></div>
+        <h3>Securise par blockchain</h3>
+        <p>Chiffrement de bout en bout et tracabilite complete sur la blockchain.</p>
+      </div>
+      <div class="feature-card" data-animate="fade-up" data-delay=".18">
+        <div class="feature-icon-wrap fi-blue"><i data-lucide="smartphone"></i></div>
+        <h3>Mobile Money</h3>
+        <p>Retrait MTN Mobile Money et Moov Money directement depuis l'application.</p>
+      </div>
+      <div class="feature-card" data-animate="fade-up" data-delay=".24">
+        <div class="feature-icon-wrap fi-green"><i data-lucide="receipt"></i></div>
+        <h3>Paiement de factures</h3>
+        <p>Payez SBEE, SONEB, MTN, Canal+ directement depuis le portail Benin.</p>
+      </div>
+      <div class="feature-card" data-animate="fade-up" data-delay=".30">
+        <div class="feature-icon-wrap fi-orange"><i data-lucide="qr-code"></i></div>
+        <h3>Paiement marchand</h3>
+        <p>Scannez un QR code pour payer vos achats locaux sans frais supplementaires.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== APP SHOWCASE ===== -->
+<section class="showcase-section" id="demo" data-animate-section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">L'application</span>
+      <h2>Decouvrez DiasporaConnect en <span class="gradient-text3">action</span></h2>
+      <p>Deux portails complets : un pour envoyer, un pour recevoir. Testez le prototype interactif.</p>
+    </div>
+    <div class="showcase-portal" data-animate="fade-up">
+      <div class="showcase-label showcase-label-orange"><i data-lucide="plane" style="width:18px;height:18px;"></i><span>Portail Diaspora — Envoyez de l'argent</span></div>
+      <div class="showcase-scroll">
+        <div class="showcase-phones">
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/diaspora-home.png" alt="Accueil"/></div></div><span class="showcase-caption">Accueil</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/diaspora-transfer.png" alt="Transfert"/></div></div><span class="showcase-caption">Nouveau transfert</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/diaspora-summary.png" alt="Resume"/></div></div><span class="showcase-caption">Resume</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/diaspora-sent.png" alt="Confirme"/></div></div><span class="showcase-caption">Confirmation</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/diaspora-profile.png" alt="Profil"/></div></div><span class="showcase-caption">Profil</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-portal" data-animate="fade-up" data-delay=".15">
+      <div class="showcase-label showcase-label-green"><i data-lucide="map-pin" style="width:18px;height:18px;"></i><span>Portail Beninois — Recevez et payez</span></div>
+      <div class="showcase-scroll">
+        <div class="showcase-phones">
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/benin-home.png" alt="Accueil Benin"/></div></div><span class="showcase-caption">Accueil</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/benin-bills.png" alt="Factures"/></div></div><span class="showcase-caption">Factures</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/benin-receive.png" alt="Recevoir"/></div></div><span class="showcase-caption">Recevoir</span></div>
+          <div class="showcase-item"><div class="iphone-sm"><div class="iphone-notch-s"></div><div class="iphone-screen-s"><img src="assets/screens/benin-withdraw.png" alt="Retirer"/></div></div><span class="showcase-caption">Retirer</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="showcase-cta" data-animate="fade-up"><a href="app.html" class="btn btn-primary btn-lg"><i data-lucide="smartphone" style="width:18px;height:18px;"></i> Tester le prototype interactif</a></div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="pricing-section" id="tarifs" data-animate-section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Tarifs transparents</span>
+      <h2>100% transparent. <span class="gradient-text2">Zero</span> surprise.</h2>
+      <p>Comparez nos frais avec les services traditionnels sur un envoi de 200 USD.</p>
+    </div>
+    <div class="pricing-table-wrapper" data-animate="fade-up">
+      <table class="pricing-table">
+        <thead><tr><th>Service</th><th>Frais</th><th>Taux de change</th><th>Destinataire recoit</th><th>Delai</th></tr></thead>
+        <tbody>
+          <tr class="pricing-highlight">
+            <td><div class="provider-name"><svg class="provider-logo" width="32" height="32" viewBox="0 0 40 40"><rect width="40" height="40" rx="10" fill="url(#lg)"/><path d="M12 14C12 14 16 10 20 10C26 10 28 14 28 18C28 24 20 30 20 30" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M17 18L20 21L27 14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg> DiasporaConnect</div></td>
+            <td><strong class="green">1,60 USD (0.8%)</strong></td><td>592 XOF/USD</td><td><strong class="green">118 400 XOF</strong></td><td><strong class="green">&lt; 30 min</strong></td>
+          </tr>
+          <tr>
+            <td><div class="provider-name"><svg class="provider-logo" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#FFDD00"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#000" font-family="Arial,sans-serif" font-weight="900" font-size="10">WU</text></svg> Western Union</div></td>
+            <td class="red">22 USD (11%)</td><td>580 XOF/USD</td><td>103 240 XOF</td><td>1-3 jours</td>
+          </tr>
+          <tr>
+            <td><div class="provider-name"><svg class="provider-logo" width="32" height="32" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#00487C"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-weight="800" font-size="9">MG</text></svg> MoneyGram</div></td>
+            <td class="red">18 USD (9%)</td><td>582 XOF/USD</td><td>105 924 XOF</td><td>1-2 jours</td>
+          </tr>
+          <tr>
+            <td><div class="provider-name"><div class="provider-logo-bank"><i data-lucide="landmark"></i></div> Banque traditionnelle</div></td>
+            <td class="red">30 USD (15%)</td><td>575 XOF/USD</td><td>97 750 XOF</td><td>3-5 jours</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="savings-callout" data-animate="fade-up" data-delay=".1">
+      <i data-lucide="trending-down" class="savings-icon"></i>
+      <span><strong>Economisez jusqu'a 20 650 XOF</strong> sur chaque transfert de 200 USD par rapport a une banque traditionnelle.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECURITY ===== -->
+<section class="security-section" id="securite" data-animate-section>
+  <div class="container security-grid">
+    <div class="security-content" data-animate="fade-up">
+      <span class="section-tag">Securite</span>
+      <h2>La blockchain au service de la <span class="gradient-text">confiance</span></h2>
+      <p class="security-desc">DiasporaConnect utilise la technologie blockchain pour garantir des transferts transparents, rapides et inviolables.</p>
+      <ul class="security-list">
+        <li><div class="sec-check"><i data-lucide="lock"></i></div><div><strong>Chiffrement de bout en bout</strong><p>Chaque transaction est chiffree avec les standards militaires AES-256.</p></div></li>
+        <li><div class="sec-check"><i data-lucide="link"></i></div><div><strong>Tracabilite blockchain</strong><p>Chaque transfert est enregistre sur la blockchain, immuable et verifiable.</p></div></li>
+        <li><div class="sec-check"><i data-lucide="shield-check"></i></div><div><strong>KYC & conformite</strong><p>Verification d'identite conforme aux normes anti-blanchiment internationales.</p></div></li>
+        <li><div class="sec-check"><i data-lucide="smartphone"></i></div><div><strong>Authentification biometrique</strong><p>Empreinte digitale et reconnaissance faciale pour securiser chaque acces.</p></div></li>
+      </ul>
+    </div>
+    <div class="security-visual" data-animate="scale-up">
+      <div class="sec-visual-card">
+        <div class="sec-shield">
+          <i data-lucide="shield-check" class="sec-shield-icon"></i>
+          <div class="sec-pulse p1"></div>
+          <div class="sec-pulse p2"></div>
+          <div class="sec-pulse p3"></div>
+        </div>
+        <h3>100% Securise</h3>
+        <p>Blockchain + chiffrement AES-256</p>
+        <div class="sec-blocks">
+          <div class="sec-block"></div><div class="sec-block"></div><div class="sec-block"></div><div class="sec-block"></div><div class="sec-block"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ODD ===== -->
+<section class="odd-section" data-animate-section>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Impact social</span>
+      <h2>Objectifs de Developpement <span class="gradient-text3">Durable</span></h2>
+      <p>DiasporaConnect contribue a 3 ODD des Nations Unies.</p>
+    </div>
+    <div class="odd-grid">
+      <div class="odd-card odd-1" data-animate="fade-up"><div class="odd-num">ODD 1</div><h3>Fin de la pauvrete</h3><p>Reduire les frais de transfert permet a chaque dollar d'atteindre les familles les plus vulnerables.</p></div>
+      <div class="odd-card odd-8" data-animate="fade-up" data-delay=".1"><div class="odd-num">ODD 8</div><h3>Travail decent</h3><p>Faciliter les investissements de la diaspora pour creer des emplois locaux au Benin.</p></div>
+      <div class="odd-card odd-10" data-animate="fade-up" data-delay=".2"><div class="odd-num">ODD 10</div><h3>Inegalites reduites</h3><p>L'ODD 10 fixe un plafond de 3% de frais d'ici 2030. DiasporaConnect propose 0.8%.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAQ ===== -->
+<section class="faq-section" id="faq" data-animate-section>
+  <div class="container faq-container">
+    <div class="section-header">
+      <span class="section-tag">FAQ</span>
+      <h2>Questions frequentes</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item"><button class="faq-trigger"><span>Comment fonctionne DiasporaConnect ?</span><i data-lucide="plus" class="faq-icon"></i></button><div class="faq-answer"><p>DiasporaConnect utilise la blockchain pour permettre des transferts directs entre la diaspora et les beneficiaires au Benin. L'envoyeur convertit sa devise en stablecoin, qui est ensuite converti en XOF cote beneficiaire, a des frais minimaux.</p></div></div>
+      <div class="faq-item"><button class="faq-trigger"><span>Quels sont les frais ?</span><i data-lucide="plus" class="faq-icon"></i></button><div class="faq-answer"><p>Les frais sont de 0.8% du montant envoye, soit jusqu'a 10x moins que Western Union ou MoneyGram. Aucun frais cache.</p></div></div>
+      <div class="faq-item"><button class="faq-trigger"><span>Comment le destinataire recoit-il l'argent ?</span><i data-lucide="plus" class="faq-icon"></i></button><div class="faq-answer"><p>Le destinataire recoit les fonds directement sur son compte Mobile Money (MTN ou Moov) en moins de 30 minutes. Il peut aussi payer ses factures ou retirer en especes.</p></div></div>
+      <div class="faq-item"><button class="faq-trigger"><span>Est-ce securise ?</span><i data-lucide="plus" class="faq-icon"></i></button><div class="faq-answer"><p>Oui. Chaque transaction est chiffree (AES-256), enregistree sur la blockchain et conforme aux normes KYC/AML internationales.</p></div></div>
+      <div class="faq-item"><button class="faq-trigger"><span>Quelles devises sont supportees ?</span><i data-lucide="plus" class="faq-icon"></i></button><div class="faq-answer"><p>USD (Dollar US), EUR (Euro), GBP (Livre Sterling) et CAD (Dollar Canadien) vers le XOF (Franc CFA).</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="cta-bg">
+    <div class="cta-orb cta-orb-1"></div>
+    <div class="cta-orb cta-orb-2"></div>
+  </div>
+  <div class="container cta-content">
+    <h2>Pret a envoyer de l'argent <span class="gradient-text">sans frais excessifs</span> ?</h2>
+    <p>Rejoignez les 2 000+ transferts simules et decouvrez une nouvelle facon d'envoyer de l'argent.</p>
+    <div class="cta-buttons">
+      <a href="app.html" class="btn btn-white btn-lg">Tester l'application</a>
+      <a href="#demo" class="btn btn-glass-white btn-lg">Voir la demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <div class="logo"><svg class="logo-svg" width="32" height="32" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="12" fill="url(#lg)"/><path d="M12 14C12 14 16 10 20 10C26 10 28 14 28 18C28 24 20 30 20 30" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/><path d="M17 18L20 21L27 14" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="30" cy="12" r="5" fill="#16A34A"/><path d="M28 12H32M30 10V14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg> <span class="logo-text">Diaspora<strong>Connect</strong></span></div>
+      <p>Transferts d'argent vers le Benin, securises par la blockchain, a des frais minimaux.</p>
+    </div>
+    <div class="footer-col"><h4>Produit</h4><div class="footer-links"><a href="#fonctionnalites">Fonctionnalites</a><a href="#tarifs">Tarifs</a><a href="#demo">Application</a><a href="#securite">Securite</a></div></div>
+    <div class="footer-col"><h4>Ressources</h4><div class="footer-links"><a href="#faq">FAQ</a><a href="#">Documentation</a><a href="#">API</a></div></div>
+    <div class="footer-col"><h4>Projet</h4><div class="footer-links"><a href="#">LumniX</a><a href="#">Equipe</a><a href="#">Contact</a></div></div>
+  </div>
+  <div class="container footer-bottom">
+    <span>&copy; 2026 DiasporaConnect — MIABE 2026 — Equipe LumniX</span>
+    <span>Propulse par la blockchain</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+  <script>
+    // Enregistrement du Service Worker PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('[PWA] Service Worker enregistré:', registration.scope);
+            
+            // Vérifier pour mises à jour
+            registration.addEventListener('updatefound', () => {
+              const newWorker = registration.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  if (confirm('Nouvelle version disponible. Recharger?')) {
+                    window.location.reload();
+                  }
+                }
+              });
+            });
+          })
+          .catch((error) => {
+            console.log('[PWA] Erreur:', error);
+          });
+      });
+    }
+
+    // Notifications push
+    if ('Notification' in window && 'serviceWorker' in navigator) {
+      Notification.requestPermission();
+    }
+  </script>
+</body>
+</html>

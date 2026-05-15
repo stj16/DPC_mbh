@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String     @id @default(uuid())
+  phone            String     @unique
+  name             String
+  walletAddress    String     @unique
+  walletPrivateKey String     // Chiffré en AES
+  otpCode          String?
+  isVerified       Boolean    @default(false)
+  createdAt        DateTime   @default(now())
+  
+  transfersSent    Transfer[] @relation("TransfersSent")
+}
+
+model Transfer {
+  id             String   @id @default(uuid())
+  transferId     String   @unique // ID on-chain (ex: TXN-2026-...)
+  senderId       String
+  recipientPhone String
+  amountEur      Float
+  amountUsdc     Float
+  feeUsdc        Float
+  status         String   @default("INITIATED") // INITIATED, LOCKED, RELEASED, CANCELLED, WITHDRAWN
+  txHash         String?
+  createdAt      DateTime @default(now())
+
+  sender         User     @relation("TransfersSent", fields: [senderId], references: [id])
+}

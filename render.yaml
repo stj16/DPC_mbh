@@ -1,0 +1,32 @@
+databases:
+  - name: diasporaconnect-db
+    plan: free
+    databaseName: diasporaconnect
+    user: diaspora
+
+services:
+  - type: web
+    name: diasporaconnect-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npx prisma generate && npx prisma db push
+    startCommand: node src/index.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: diasporaconnect-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        generateValue: true
+      - key: USE_REAL_TWILIO
+        value: "false"
+      - key: CORS_ORIGINS
+        value: "*"
+      - key: PORT
+        value: "3000"
+    healthCheckPath: /api/health

@@ -1,0 +1,27 @@
+# ═══════════════════════════════════════════════════════════
+# .gitignore — Projet DiasporaConnect / Contracts (Hardhat)
+# ═══════════════════════════════════════════════════════════
+
+# Dépendances Node.js
+node_modules/
+
+# Fichiers de compilation Hardhat
+artifacts/
+cache/
+typechain-types/
+
+# Variables d'environnement (CONTIENT DES CLÉS PRIVÉES !)
+.env
+.env.local
+
+# Adresses de contrats (générées automatiquement)
+# Décommenter si vous ne voulez pas les commit
+# contract-addresses.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

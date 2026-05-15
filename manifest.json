@@ -1,0 +1,34 @@
+{
+  "name": "DiasporaConnect",
+  "short_name": "Diaspora",
+  "description": "Plateforme de transfert de fonds internationaux - Diaspora africaine vers le Benin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#16213e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Envoyer de l'argent",
+      "short_name": "Envoyer",
+      "description": "Initier un nouveau transfert",
+      "url": "/?action=send"
+    },
+    {
+      "name": "Retirer",
+      "short_name": "Retirer",
+      "description": "Retirer des fonds",
+      "url": "/?action=withdraw"
+    }
+  ]
+}
