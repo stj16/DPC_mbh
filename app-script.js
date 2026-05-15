@@ -121,7 +121,7 @@ async function apiVerifyOTP(phone, otpCode) {
         id: 'user-' + Date.now(),
         name: transferState.senderName,
         phone: phone,
-        walletAddress: '0x' + Array(40).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random()*16)]).join('')
+        walletAddress: '0x' + Array(40).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join('')
       }
     };
   }
@@ -157,7 +157,7 @@ async function apiSendTransfer(token, amountEur, recipientPhone) {
       amountXof: amountXof,
       fee: transferState.amount * 0.008,
       status: 'LOCKED',
-      txHash: '0x' + Array(64).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random()*16)]).join(''),
+      txHash: '0x' + Array(64).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join(''),
       createdAt: new Date().toISOString()
     };
     demoTransfers.push(transfer);
@@ -257,12 +257,69 @@ async function apiWithdraw(token, transferId, momoProvider, momoPhone) {
       success: true,
       message: 'Fonds retires avec succes (Simulation Mobile Money)',
       amountXof: beninState.withdrawAmount,
-      txHash: '0x' + Array(64).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random()*16)]).join(''),
+      txHash: '0x' + Array(64).fill(0).map(() => '0123456789abcdef'[Math.floor(Math.random() * 16)]).join(''),
       reference: generateRef(),
       provider: momoProvider,
       phone: momoPhone
     };
   }
+}
+
+// ===================== TRANSACTION HISTORY =====================
+
+async function apiGetHistory(token) {
+  try {
+    if (!API_BASE || !token || token.startsWith('mock-')) throw new Error('No API');
+    const res = await fetch(`${API_BASE}/api/transactions`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('Auth required');
+    return await res.json();
+  } catch {
+    // Mock fallback: return demoTransfers + fake history
+    const mockHistory = demoTransfers.length > 0 ? demoTransfers : [
+      { transferId: 'TXN-2026-DEMO01', recipientPhone: '+229 91 23 45 67', amount: 100, currency: 'EUR', amountXof: 65596, status: 'LOCKED', createdAt: new Date(Date.now() - 3600000).toISOString() },
+      { transferId: 'TXN-2026-DEMO02', recipientPhone: '+229 97 88 77 66', amount: 200, currency: 'USD', amountXof: 118400, status: 'RELEASED', createdAt: new Date(Date.now() - 86400000).toISOString() }
+    ];
+    return mockHistory;
+  }
+}
+
+function renderHistory(transactions) {
+  const container = document.getElementById('dHistoryTx');
+  if (!container) return;
+
+  if (!transactions || transactions.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:32px;color:var(--g400);font-size:.9rem;">Aucune transaction pour l'instant</div>`;
+    return;
+  }
+
+  container.innerHTML = transactions.map(t => {
+    const isReceived = t.recipientPhone === transferState.senderPhone;
+    const label = isReceived ? (t.sender?.name || 'Reçu') : (t.recipientPhone || 'Envoyé');
+    const initials = label.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    const avatarClass = isReceived ? 'avatar-green-sm' : 'avatar-orange-sm';
+    const amountText = isReceived
+      ? `+${fmt(t.amountXof || 0)} XOF`
+      : `-${t.amount} ${t.currency || 'EUR'}`;
+    const amountColor = isReceived ? 'color:var(--green)' : 'color:var(--dark)';
+    const statusBadge = t.status === 'RELEASED'
+      ? `<span style="font-size:.7rem;background:var(--green-light);color:var(--green);padding:2px 6px;border-radius:99px;font-weight:600;">Retiré</span>`
+      : t.status === 'LOCKED'
+        ? `<span style="font-size:.7rem;background:#FFF7ED;color:var(--orange);padding:2px 6px;border-radius:99px;font-weight:600;">En cours</span>`
+        : '';
+    const date = t.createdAt ? new Date(t.createdAt).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }) : '';
+
+    return `
+      <div class="tx-item">
+        <div class="avatar ${avatarClass}">${initials || '??'}</div>
+        <div class="tx-info">
+          <strong>${label}</strong>
+          <span>${date} ${statusBadge}</span>
+        </div>
+        <span class="tx-amount" style="${amountColor}">${amountText}</span>
+      </div>`;
+  }).join('');
 }
 
 async function apiGetRates() {
@@ -294,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const diasporaApp = document.getElementById('diasporaApp');
   const beninApp = document.getElementById('beninApp');
 
-  window.openPortal = function(portal) {
+  window.openPortal = function (portal) {
     portalSelector.classList.remove('active-view');
     diasporaApp.classList.remove('active-view');
     beninApp.classList.remove('active-view');
@@ -307,14 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.lucide) lucide.createIcons();
   };
 
-  window.showPortalSelector = function() {
+  window.showPortalSelector = function () {
     diasporaApp.classList.remove('active-view');
     beninApp.classList.remove('active-view');
     portalSelector.classList.add('active-view');
   };
 
   // ===================== SCREEN NAVIGATION =====================
-  window.goScreen = function(screenId) {
+  window.goScreen = function (screenId) {
     const appShell = document.getElementById(screenId).closest('.app-shell');
     const screens = appShell.querySelectorAll('.screen');
     screens.forEach(s => s.classList.remove('active'));
@@ -335,6 +392,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (window.lucide) lucide.createIcons();
+
+    // Load real history when navigating to d-history
+    if (screenId === 'd-history') {
+      const container = document.getElementById('dHistoryTx');
+      if (container) container.innerHTML = '<div style="text-align:center;padding:32px;color:var(--g400);font-size:.9rem;"><span class="spinner"></span> Chargement...</div>';
+      apiGetHistory(transferState.token).then(txs => renderHistory(txs));
+    }
   };
 
   // ===================== HOME CALCULATOR =====================
@@ -434,7 +498,7 @@ function clearOTPInputs() {
 
 // ===================== DIASPORA TRANSFER FLOW =====================
 
-window.startTransferFlow = async function() {
+window.startTransferFlow = async function () {
   const senderName = document.getElementById('tfSenderName').value.trim();
   const senderPhone = document.getElementById('tfSenderPhone').value.trim();
   const recipientPhone = document.getElementById('tfRecipientPhone').value.trim();
@@ -482,7 +546,7 @@ window.startTransferFlow = async function() {
   }
 };
 
-window.verifyOTP = async function() {
+window.verifyOTP = async function () {
   const code = getOTPCode();
   if (code.length !== 6) {
     showToast('Veuillez entrer le code complet a 6 chiffres', 'error');
@@ -518,13 +582,13 @@ window.verifyOTP = async function() {
   }
 };
 
-window.resendOTP = async function() {
+window.resendOTP = async function () {
   showToast('Renvoi du code...', 'info');
   await apiSendOTP(transferState.senderPhone, transferState.senderName);
   showToast('Nouveau code OTP envoye !', 'success');
 };
 
-window.confirmTransfer = async function() {
+window.confirmTransfer = async function () {
   const btn = document.getElementById('btnConfirmTransfer');
   setLoading(btn, true);
 
@@ -556,7 +620,7 @@ window.confirmTransfer = async function() {
   }
 };
 
-window.copyTxId = function() {
+window.copyTxId = function () {
   const txId = transferState.transferId || 'TXN-2026-DEMO';
   navigator.clipboard.writeText(txId).then(() => {
     showToast('ID copie !', 'success');
@@ -565,7 +629,7 @@ window.copyTxId = function() {
   });
 };
 
-window.resetDiaspora = function() {
+window.resetDiaspora = function () {
   transferState = {
     senderName: '',
     senderPhone: '',
@@ -588,7 +652,7 @@ window.resetDiaspora = function() {
 
 // ===================== BENIN PORTAL: SEARCH TRANSFER =====================
 
-window.searchTransfer = async function() {
+window.searchTransfer = async function () {
   const phone = document.getElementById('bSearchPhone').value.trim();
   const txId = document.getElementById('bSearchTxId').value.trim();
 
@@ -636,7 +700,7 @@ window.searchTransfer = async function() {
   }
 };
 
-window.goToWithdrawFromSearch = function(txId, amount) {
+window.goToWithdrawFromSearch = function (txId, amount) {
   beninState.selectedTransferId = txId;
   beninState.withdrawAmount = amount;
 
@@ -652,7 +716,7 @@ window.goToWithdrawFromSearch = function(txId, amount) {
 
 // ===================== BENIN PORTAL: WITHDRAW =====================
 
-window.searchForWithdraw = async function() {
+window.searchForWithdraw = async function () {
   const phone = document.getElementById('bWithdrawPhone').value.trim();
   if (!phone) {
     showToast('Entrez votre numero de telephone', 'error');
@@ -696,7 +760,7 @@ window.searchForWithdraw = async function() {
   }
 };
 
-window.selectTransferForWithdraw = function(txId, amount) {
+window.selectTransferForWithdraw = function (txId, amount) {
   beninState.selectedTransferId = txId;
   beninState.withdrawAmount = amount;
 
@@ -709,7 +773,7 @@ window.selectTransferForWithdraw = function(txId, amount) {
   if (window.lucide) lucide.createIcons();
 };
 
-window.showWithdrawModal = function(provider) {
+window.showWithdrawModal = function (provider) {
   const modal = document.getElementById('modalContent');
   const overlay = document.getElementById('modalOverlay');
 
@@ -739,12 +803,12 @@ window.showWithdrawModal = function(provider) {
   if (window.lucide) lucide.createIcons();
 };
 
-window.closeModal = function() {
+window.closeModal = function () {
   document.getElementById('modalContent').style.display = 'none';
   document.getElementById('modalOverlay').style.display = 'none';
 };
 
-window.executeWithdraw = async function(provider) {
+window.executeWithdraw = async function (provider) {
   const phone = document.getElementById('modalMomoPhone').value.trim();
   if (!phone) {
     showToast('Entrez votre numero Mobile Money', 'error');
@@ -783,7 +847,7 @@ window.executeWithdraw = async function(provider) {
   }
 };
 
-window.resetBenin = function() {
+window.resetBenin = function () {
   beninState = { foundTransfer: null, selectedTransferId: null, withdrawAmount: 0 };
   document.getElementById('bWithdrawStep1').style.display = 'block';
   document.getElementById('bWithdrawStep2').style.display = 'none';
@@ -797,7 +861,7 @@ window.resetBenin = function() {
 };
 
 // ===================== BILL PAYMENT (DEMO) =====================
-window.payBill = async function(name, amount) {
+window.payBill = async function (name, amount) {
   showToast(`Paiement ${name} en cours...`, 'info');
   await delay(1500);
   showToast(`${name} - ${fmt(amount)} XOF paye avec succes !`, 'success');
